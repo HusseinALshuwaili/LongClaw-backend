@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // Cyber Brutalism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* HERO */
+  .hero{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);}
+  .hero-left{padding:80px 50px 60px 24px;position:relative;}
+  .tag{font-size:11px;letter-spacing:2px;color:var(--gray);margin-bottom:24px;}
+  .tag b{color:var(--acid);}
+  h1.title{
+    font-family:var(--display);font-size:64px;line-height:1.05;font-weight:400;
+    text-transform:uppercase;letter-spacing:-1px;margin-bottom:24px;
+  }
+  .triple h2, .wcard .label h4{font-family:var(--display);font-weight:400;}
+  .sub-yellow{color:var(--acid);font-size:15px;font-weight:700;text-transform:uppercase;margin-bottom:18px;letter-spacing:.5px;}
+  .desc{color:var(--gray);max-width:420px;margin-bottom:36px;font-size:13px;}
+  .hero-actions{display:flex;gap:28px;align-items:center;flex-wrap:wrap;}
+  .side-label{
+    position:absolute;left:-28px;top:50%;transform:rotate(-90deg) translateX(50%);
+    font-size:10px;letter-spacing:2px;color:var(--gray2);white-space:nowrap;
+  }
+  .hero-right{
+    position:relative;background:var(--bg2);display:flex;align-items:center;justify-content:center;
+    border-left:1px solid var(--line);overflow:hidden;min-height:480px;
+  }
+  .hud-top{position:absolute;top:16px;left:16px;font-size:10px;color:var(--gray);letter-spacing:1px;}
+  .hud-top .acid{color:var(--acid);}
+  .hud-tag{position:absolute;top:16px;right:16px;font-size:11px;color:var(--gray);}
+  .hud-coords{
+    position:absolute;bottom:60px;right:16px;background:rgba(212,255,31,0.08);border:1px solid var(--acid);
+    padding:10px 14px;font-size:10px;color:var(--acid);line-height:1.6;
+  }
+  .hud-scn{position:absolute;bottom:16px;right:16px;font-size:10px;color:var(--gray2);}
+  .glitch-grid{
+    position:absolute;inset:0;
+    background-image:linear-gradient(rgba(212,255,31,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,255,31,0.04) 1px,transparent 1px);
+    background-size:28px 28px;
+  }
+  svg.head{position:relative;z-index:2;width:340px;}
+  .wire{fill:none;stroke:var(--acid);stroke-width:0.6;opacity:.85;}
+  .wire-dim{fill:none;stroke:var(--gray2);stroke-width:0.4;opacity:.6;}
+  .scanline{position:absolute;left:0;right:0;height:2px;background:rgba(212,255,31,0.5);animation:scan 3.2s linear infinite;mix-blend-mode:screen;}
+  @keyframes scan{0%{top:0%;}100%{top:100%;}}
+  .glitch-block{position:absolute;background:var(--acid);mix-blend-mode:difference;animation:flicker 2.6s steps(2) infinite;}
+  @keyframes flicker{0%,100%{opacity:.9;}50%{opacity:0;}}
+
+  /* PRINCIPLES */
+  .principles{border-bottom:1px solid var(--line);padding:50px 24px;}
+  .pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;}
+  .pgrid .pcard{padding:0 24px;border-left:1px dashed var(--line);}
+  .pgrid .pcard:first-child{border-left:none;padding-left:0;}
+
+  /* WORK / FEATURES */
+  .work{padding:50px 24px;border-bottom:1px solid var(--line);}
+  .wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);}
+
+  /* JOIN / STATUS / SUBSCRIBE */
+  .triple{display:grid;grid-template-columns:1fr 1fr 1fr;}
+  .triple > div{padding:46px 30px;border-right:1px solid var(--line);}
+  .triple > div:last-child{border-right:none;}
+  .triple h2{font-size:24px;text-transform:uppercase;margin-bottom:16px;line-height:1.15;}
+  .triple p{color:var(--gray);font-size:12px;margin-bottom:24px;max-width:280px;}
+  .status-row{display:flex;justify-content:space-between;font-size:11px;color:var(--gray);margin-bottom:14px;border-bottom:1px dashed var(--line);padding-bottom:10px;}
+  .status-row b{color:var(--white);font-weight:600;}
+  .bar{height:5px;background:var(--line);width:120px;}
+  .bar i{display:block;height:100%;background:var(--acid);width:0%;transition:width 1.1s cubic-bezier(.2,.8,.2,1);}
+  .bar i.filled{width:68%;}
+  .status-ok{margin-top:20px;border:1px solid var(--acid);color:var(--acid);padding:10px;text-align:center;font-size:11px;letter-spacing:1px;}
+  .sub-form{display:flex;border:1px solid var(--gray2);}
+  .sub-form input{flex:1;background:transparent;border:none;color:#fff;padding:14px;font-family:var(--mono);font-size:12px;}
+  .sub-form input:focus{outline:none;}
+  .sub-form button{background:var(--acid);color:#000;border:none;padding:0 20px;font-weight:700;font-size:12px;letter-spacing:1px;cursor:pointer;}
+  .fcopy{color:var(--gray2);font-size:11px;margin-top:30px;}
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;}
+    .pgrid{grid-template-columns:repeat(2,1fr);row-gap:30px;}
+    .pgrid .pcard{border-left:none;padding-left:0;}
+    .wgrid{grid-template-columns:repeat(2,1fr);}
+    .triple{grid-template-columns:1fr;}
+    .triple>div{border-right:none;border-bottom:1px solid var(--line);}
+    h1.title{font-size:40px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+    <div class="navlinks">
+      <a href="work.html"><span>+</span>WORK</a>
+      <a href="services.html"><span>+</span>SERVICES</a>
+      <a href="about.html"><span>+</span>ABOUT</a>
+      <a href="dashboard.html"><span>+</span>LABS</a>
+      <a href="roadmap.html"><span>+</span>ROADMAP</a>
+      <a href="contact.html"><span>+</span>CONTACT</a>
+    </div>
+    <div class="nav-right">
+      <div>SYS_TIME<br><b style="color:#fff" id="clock">23:47:12</b> UTC+0</div>
+      <a class="cta-btn" href="dashboard.html">DEPLOY AN AGENT ↗</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="side-label">AUTONOMOUS SECURITY / 2026</div>
+    <div class="tag">▮ AUTONOMOUS DEFENSE <b>/01</b></div>
+    <h1 class="title">AI AGENTS<br>FOR CYBER<br>DEFENSE</h1>
+    <div class="sub-yellow">SECURITY ISN'T OPTIONAL. IT'S AUTONOMOUS.</div>
+    <p class="desc">Sentinel deploys fleets of AI agents that triage alerts, patch known vulnerabilities, monitor endpoints, and write the incident report — so your team handles the threats that actually need a human.</p>
+    <div class="hero-actions">
+      <a class="cta-btn" href="work.html">EXPLORE AGENTS ↗</a>
+      <a class="ghost-link" href="dashboard.html">VIEW LIVE DASHBOARD ⤢</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="glitch-grid"></div>
+    <div class="hud-top">&gt;SCANNING_NETWORK... <span class="acid">94%</span></div>
+    <div class="hud-tag">/01</div>
+    <svg class="head" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <ellipse class="wire-dim" cx="100" cy="95" rx="55" ry="65"/>
+      <path class="wire" d="M55 70 Q100 20 145 70 Q150 130 130 170 Q115 200 100 210 Q85 200 70 170 Q50 130 55 70Z"/>
+      <line class="wire-dim" x1="55" y1="80" x2="145" y2="80"/>
+      <line class="wire-dim" x1="50" y1="105" x2="150" y2="105"/>
+      <line class="wire-dim" x1="55" y1="135" x2="145" y2="135"/>
+      <line class="wire-dim" x1="65" y1="165" x2="135" y2="165"/>
+      <line class="wire" x1="100" y1="20" x2="100" y2="210"/>
+      <line class="wire-dim" x1="70" y1="35" x2="70" y2="195"/>
+      <line class="wire-dim" x1="130" y1="35" x2="130" y2="195"/>
+      <circle class="wire" cx="78" cy="100" r="3"/>
+      <circle class="wire" cx="122" cy="100" r="3"/>
+      <path class="wire-dim" d="M85 150 Q100 162 115 150"/>
+      <rect class="wire" x="0" y="210" width="200" height="2"/>
+      <rect class="wire-dim" x="60" y="218" width="80" height="14"/>
+    </svg>
+    <div class="scanline"></div>
+    <div class="glitch-block" style="top:30%;left:10%;width:40px;height:8px;"></div>
+    <div class="glitch-block" style="top:60%;right:15%;width:25px;height:25px;animation-delay:1s;"></div>
+    <div class="hud-coords">THREATS_BLOCKED: <span class="countup" data-target="1204">0</span><br>AGENTS_ACTIVE: <span class="countup" data-target="38">0</span><br>UPTIME: <span class="countup" data-target="99.98" data-decimals="2">0</span>%</div>
+    <div class="hud-scn">//SCN_01</div>
+  </div>
+</section>
+
+<section class="principles">
+  <div class="sec-label"><b>/02</b> CORE PRINCIPLES</div>
+  <div class="pgrid">
+    <div class="pcard reveal">
+      <div class="icon">▦</div>
+      <h3>FUNCTION OVER FORM</h3>
+      <p>Agents built to close tickets, not to look impressive on a dashboard.</p>
+    </div>
+    <div class="pcard reveal">
+      <div class="icon">▢</div>
+      <h3>ALWAYS-ON COVERAGE</h3>
+      <p>No nights, no weekends, no missed alerts. Ever.</p>
+    </div>
+    <div class="pcard reveal">
+      <div class="icon">≡</div>
+      <h3>HUMAN-IN-THE-LOOP</h3>
+      <p>Agents act on the routine. Humans decide on the critical.</p>
+    </div>
+    <div class="pcard reveal">
+      <div class="icon">◫</div>
+      <h3>EXPLAINABLE ACTIONS</h3>
+      <p>Every patch, block, and flag comes with a plain-language log.</p>
+    </div>
+    <div class="pcard reveal">
+      <div class="icon">⌗</div>
+      <h3>RAW &amp; AUDITABLE</h3>
+      <p>No black box. Every decision is traceable end to end.</p>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="agent-roster">
+  <div class="sec-label"><b>/03</b> THE MVP — 4 AGENTS, LIVE TODAY</div>
+  <p style="color:var(--gray);font-size:12px;max-width:560px;margin:-10px 0 24px;">We're launching small on purpose: real AI backends, real scanning, no demo data — for 4 agents. <a href="roadmap.html" style="color:var(--acid);">8 more are spec'd and on the roadmap →</a></p>
+
+  <div class="tier-label">// STRATEGIC LAYER — decide &amp; classify</div>
+  <div class="wgrid">
+    <a class="wcard lime reveal" href="agent.html?id=triage">
+      <div class="flag">FLAGSHIP / V1</div>
+      <div class="wbg"></div>
+      <div class="label"><h4>TRIAGE_AGENT ↗</h4><p>CLASSIFIES &amp; PRIORITIZES ALERTS — HUMAN CONFIRMS ALL ACTIONS</p></div>
+    </a>
+  </div>
+
+  <div class="tier-label">// TACTICAL LAYER — scan, audit &amp; act (authorized assets only)</div>
+  <div class="wgrid">
+    <a class="wcard dark reveal" href="agent.html?id=network-recon">
+      <div class="wbg"></div>
+      <div class="label"><h4>NETWORK_RECON ↗</h4><p>REAL PORT/SERVICE SCANS, EXPOSURE DIFFING</p></div>
+    </a>
+    <a class="wcard mesh reveal" href="agent.html?id=vuln-scanner">
+      <div class="wbg"></div>
+      <div class="label"><h4>VULN_SCANNER ↗</h4><p>REAL CVE SCANS AGAINST APPS &amp; SERVICES</p></div>
+    </a>
+    <a class="wcard planet reveal" href="agent.html?id=config-audit">
+      <div class="wbg"></div>
+      <div class="label"><h4>CONFIG_AUDIT ↗</h4><p>CIS-BENCHMARK CHECKS, REAL CLOUD MISCONFIG</p></div>
+    </a>
+    <a class="wcard dark reveal" href="roadmap.html" style="opacity:.6;">
+      <div class="flag" style="background:transparent;border:1px solid var(--amber);color:var(--amber);">+8 MORE</div>
+      <div class="wbg"></div>
+      <div class="label"><h4>ROADMAP ↗</h4><p>ORCHESTRATOR, PHISHING DEFENSE, INCIDENT REPORT &amp; 5 MORE — SPEC'D, POST-MVP</p></div>
+    </a>
+  </div>
+</section>
+
+<section class="triple">
+  <div class="reveal">
+    <div class="sec-label"><b>/04</b> JOIN THE PERIMETER</div>
+    <h2>STOP DROWNING IN ALERTS</h2>
+    <p>Sentinel handles the repetitive 80% of security ops so your analysts focus on the 20% that matters.</p>
+    <a class="cta-btn" href="contact.html">DEPLOY NOW ↗</a>
+  </div>
+  <div class="reveal">
+    <div class="sec-label"><b>/05</b> SYSTEM STATUS</div>
+    <div class="status-row"><span>AGENT_LOAD</span><div class="bar"><i id="load-bar"></i></div></div>
+    <div class="status-row"><span>ALERTS_QUEUED</span><b>12 / 480</b></div>
+    <div class="status-row"><span>AVG_RESPONSE</span><b>1.8s</b></div>
+    <div class="status-row"><span>NETWORK</span><b>SECURE</b></div>
+    <a class="status-ok" href="dashboard.html" style="display:block;">ALL SYSTEMS OPERATIONAL — VIEW LIVE ↗</a>
+  </div>
+  <div class="reveal">
+    <div class="sec-label"><b>/06</b> SUBSCRIBE TO SIGNAL</div>
+    <p>Threat intel, product drops, and agent updates. No noise.</p>
+    <form class="sub-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ SUBSCRIBED'; this.querySelector('button').disabled=true;">
+      <input type="email" placeholder="ENTER EMAIL" required>
+      <button type="submit">SUBSCRIBE</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <div class="flogo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+      <p style="color:var(--gray2);font-size:11px;">© 2026 SENTINEL LABS<br>ALL RIGHTS RESERVED.</p>
+    </div>
+    <div>
+      <h5>NAVIGATION</h5>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="dashboard.html">Labs</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>RESOURCES</h5>
+      <ul><li>Manifesto</li><li>Blog</li><li>Style Guide</li><li>Newsletter</li><li>Careers</li></ul>
+    </div>
+    <div>
+      <h5>GLOBAL NODE</h5>
+      <div class="map">
+        <i style="top:30%;left:20%;"></i>
+        <i style="top:40%;left:48%;"></i>
+        <i style="top:55%;left:80%;"></i>
+        <i style="top:25%;left:65%;"></i>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="stripe-bar"></div>
+
+<script src="shared.js"></script>
+</body>
+</html>

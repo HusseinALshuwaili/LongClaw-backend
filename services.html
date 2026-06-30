@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .tiers{padding:60px 24px 80px;}
+  .tiergrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+  .tier{background:var(--bg);padding:32px 26px;display:flex;flex-direction:column;transition:transform .2s ease, box-shadow .2s ease;}
+  .tier:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.5);}
+  .tier.feat{box-shadow:0 0 0 1px var(--acid);}
+  .tier .tname{font-family:var(--display);font-size:18px;text-transform:uppercase;margin-bottom:6px;}
+  .tier .tprice{color:var(--acid);font-size:22px;font-weight:700;margin-bottom:18px;}
+  .tier .tprice span{font-size:11px;color:var(--gray);font-weight:400;}
+  .tier ul{list-style:none;margin-bottom:24px;flex:1;}
+  .tier li{font-size:12px;color:var(--gray);padding:8px 0;border-bottom:1px dashed var(--line);display:flex;gap:8px;}
+  .tier li span{color:var(--acid);}
+  .tier .badge{align-self:flex-start;font-size:9px;letter-spacing:1px;color:#000;background:var(--acid);padding:4px 8px;margin-bottom:14px;}
+  @media(max-width:900px){ .tiergrid{grid-template-columns:1fr;} }
+
+  .process{padding:60px 24px;border-top:1px solid var(--line);}
+  .psteps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:28px;}
+  .pstep{background:var(--bg);padding:22px;}
+  .pstep .pn{font-family:var(--display);color:var(--acid);font-size:22px;margin-bottom:10px;}
+  .pstep h4{font-size:12px;text-transform:uppercase;margin-bottom:8px;}
+  .pstep p{font-size:11px;color:var(--gray);}
+  @media(max-width:900px){ .psteps{grid-template-columns:1fr 1fr;} }
+
+  .faq{padding:60px 24px 80px;border-top:1px solid var(--line);max-width:760px;}
+  .faqitem{border-bottom:1px solid var(--line);padding:18px 0;}
+  .faqitem .q{font-size:13px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;}
+  .faqitem .a{font-size:12px;color:var(--gray);margin-top:10px;max-width:600px;display:none;}
+  .faqitem.open .a{display:block;}
+  .faqitem .q::after{content:'+';color:var(--acid);}
+  .faqitem.open .q::after{content:'−';}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="cybersec-agents-landing.html" class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</a>
+    <div class="navlinks">
+      <a href="work.html"><span>01</span>WORK</a>
+      <a href="services.html"><span>02</span>SERVICES</a>
+      <a href="about.html"><span>03</span>ABOUT</a>
+      <a href="dashboard.html"><span>04</span>LABS</a>
+      <a href="roadmap.html"><span>05</span>ROADMAP</a>
+      <a href="contact.html"><span>06</span>CONTACT</a>
+    </div>
+    <div class="nav-right"><span id="clock">00:00:00</span></div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="tag"><b>/01</b> PRICING & PACKAGES</div>
+  <h1>PICK A TIER.<br>SCOPE YOUR ASSETS.<br>GO LIVE THIS WEEK.</h1>
+  <p>Every plan ships V1's classify-only model: agents recommend, you confirm. No surprise autonomy, no surprise bill.</p>
+</section>
+
+<section class="tiers">
+  <div class="tiergrid">
+    <div class="tier reveal">
+      <div class="tname">STARTER</div>
+      <div class="tprice">$490<span>/mo</span></div>
+      <ul>
+        <li><span>→</span> Triage Agent (flagship)</li>
+        <li><span>→</span> Up to 25 assets in registry</li>
+        <li><span>→</span> Vuln Scanner — weekly runs</li>
+        <li><span>→</span> Email + dashboard alerts</li>
+        <li><span>→</span> Human-confirm on everything</li>
+      </ul>
+      <a class="cta-btn outline" href="contact.html">TALK TO US →</a>
+    </div>
+    <div class="tier feat reveal">
+      <div class="badge">MOST COMMON</div>
+      <div class="tname">GROWTH</div>
+      <div class="tprice">$1,450<span>/mo</span></div>
+      <ul>
+        <li><span>→</span> Full strategic layer (8 agents)</li>
+        <li><span>→</span> Up to 150 assets in registry</li>
+        <li><span>→</span> Vuln Scanner + Network Recon — daily</li>
+        <li><span>→</span> Config Audit — continuous</li>
+        <li><span>→</span> Slack/Teams integration</li>
+        <li><span>→</span> Priority queue SLAs</li>
+      </ul>
+      <a class="cta-btn" href="contact.html">START GROWTH →</a>
+    </div>
+    <div class="tier reveal">
+      <div class="tname">ENTERPRISE</div>
+      <div class="tprice">CUSTOM</div>
+      <ul>
+        <li><span>→</span> All 12 agents, full tactical layer</li>
+        <li><span>→</span> Unlimited assets, multi-org scoping</li>
+        <li><span>→</span> Log Forensics on-demand</li>
+        <li><span>→</span> Custom compliance frameworks</li>
+        <li><span>→</span> Dedicated onboarding + SLA</li>
+        <li><span>→</span> Audit log export / SSO</li>
+      </ul>
+      <a class="cta-btn outline" href="contact.html">REQUEST A QUOTE →</a>
+    </div>
+  </div>
+</section>
+
+<section class="process">
+  <div class="sec-label"><b>/02</b> HOW ONBOARDING WORKS</div>
+  <div class="psteps">
+    <div class="pstep reveal"><div class="pn">01</div><h4>VERIFY ASSETS</h4><p>You prove ownership of each asset via a DNS TXT record or signed cloud IAM role.</p></div>
+    <div class="pstep reveal"><div class="pn">02</div><h4>SET SCOPE</h4><p>We register exact scan boundaries and rate limits per asset — nothing outside scope is ever touched.</p></div>
+    <div class="pstep reveal"><div class="pn">03</div><h4>AGENTS GO LIVE</h4><p>Triage and your selected agents start classifying within 24 hours. Everything routes to your queue.</p></div>
+    <div class="pstep reveal"><div class="pn">04</div><h4>YOU CONFIRM</h4><p>You review and confirm every escalation in the dashboard. Agents only act after your sign-off.</p></div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="sec-label"><b>/03</b> COMMON QUESTIONS</div>
+  <div class="faqitem"><div class="q">Can agents take action without me?</div><div class="a">Not in V1. Every plan is classify-only — agents recommend an action and a confidence score, and a human confirms before anything closes, blocks, or patches.</div></div>
+  <div class="faqitem"><div class="q">What can tactical agents actually scan?</div><div class="a">Only assets you've explicitly verified via a DNS TXT record or signed cloud IAM role. Each asset has its own scope boundary and rate limit — nothing is probed outside that.</div></div>
+  <div class="faqitem"><div class="q">Can I change tiers later?</div><div class="a">Yes — upgrade or downgrade anytime; your asset registry and agent history carry over.</div></div>
+  <div class="faqitem"><div class="q">Do you offer a trial?</div><div class="a">Yes, a 14-day pilot on the Starter tier with up to 10 assets. Reach out via the contact page to set one up.</div></div>
+</section>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <div class="flogo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+      <p style="color:var(--gray);font-size:12px;max-width:280px;">AI agents that triage real threats, so your team stops drowning in alerts.</p>
+      <div class="map"><i style="top:30%;left:20%;"></i><i style="top:60%;left:55%;"></i><i style="top:40%;left:80%;"></i></div>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Live MVP Agents</h5>
+      <ul>
+        <li><a href="agent.html?id=triage">Triage</a></li>
+        <li><a href="agent.html?id=network-recon">Network Recon</a></li>
+        <li><a href="agent.html?id=vuln-scanner">Vuln Scanner</a></li>
+        <li><a href="agent.html?id=config-audit">Config Audit</a></li>
+        <li><a href="roadmap.html">+8 more on roadmap →</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Status</h5>
+      <ul>
+        <li><a href="dashboard.html">● All systems operational</a></li>
+        <li><a href="contact.html">support@sentinel-agents.io</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="stripe-bar"></div>
+
+<script src="shared.js"></script>
+<script>
+document.querySelectorAll('.faqitem .q').forEach(q=>{
+  q.addEventListener('click', ()=> q.parentElement.classList.toggle('open'));
+});
+</script>
+
+</body>
+</html>

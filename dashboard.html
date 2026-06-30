@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  body{font-size:13px;}
+  .shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh;}
+
+  /* SIDEBAR */
+  .sidebar{border-right:1px solid var(--line);padding:20px;display:flex;flex-direction:column;}
+  .sidebar .logo{font-size:15px;margin-bottom:8px;}
+  .back-link{font-size:10px;color:var(--gray2);margin-bottom:34px;display:block;}
+  .back-link:hover{color:var(--acid);}
+  .nav-group{margin-bottom:30px;}
+  .nav-group h6{font-size:10px;color:var(--gray2);letter-spacing:2px;margin-bottom:12px;}
+  .agent-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:9px 0;border-bottom:1px dashed var(--line);font-size:11px;color:var(--gray);
+    transition:color .15s ease, padding-left .15s ease;
+  }
+  .agent-item:hover{color:var(--white);padding-left:4px;}
+  .agent-item b{color:#fff;font-weight:600;}
+  .dotstat{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .dotstat.on{background:var(--acid);box-shadow:0 0 5px var(--acid);}
+  .dotstat.warn{background:var(--amber);}
+  .sidebar-foot{margin-top:auto;font-size:10px;color:var(--gray2);}
+
+  /* MAIN */
+  main{padding:28px 32px;}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;flex-wrap:wrap;gap:16px;}
+  .topbar h1{font-family:var(--display);font-weight:400;font-size:24px;text-transform:uppercase;letter-spacing:-.5px;}
+  .kpi .num{font-family:var(--display);font-weight:400;}
+  .topbar .sub{color:var(--gray);font-size:11px;margin-top:4px;}
+  .scope-pill{border:1px solid var(--acid);color:var(--acid);font-size:10px;padding:6px 10px;letter-spacing:1px;display:inline-flex;gap:6px;align-items:center;}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-bottom:1px;}
+  .kpi{background:var(--bg);padding:18px 20px;transition:transform .2s ease, box-shadow .2s ease;}
+  .kpi:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--acid), 0 10px 24px rgba(0,0,0,.5);}
+  .kpi .num{font-size:28px;font-weight:700;color:var(--acid);}
+  .kpi.bad .num{color:var(--red);}
+  .kpi .lbl{font-size:10px;color:var(--gray);letter-spacing:1px;margin-top:4px;}
+
+  .btn-sm{transition:transform .12s ease, background .15s ease, color .15s ease;}
+  .btn-sm:active{transform:scale(.94);}
+  tr{transition:background .15s ease;}
+  tr:not(.resolved):hover{background:rgba(212,255,31,.04);}
+
+  .panels{display:grid;grid-template-columns:1.6fr 1fr;gap:1px;background:var(--line);margin-top:1px;}
+  .panel{background:var(--bg);padding:22px;}
+  .panel h2{font-size:12px;letter-spacing:1px;color:var(--gray);margin-bottom:16px;text-transform:uppercase;}
+  .panel h2 b{color:var(--acid);}
+
+  /* TRIAGE QUEUE TABLE */
+  table{width:100%;border-collapse:collapse;font-size:11px;}
+  th{text-align:left;color:var(--gray2);font-size:10px;letter-spacing:1px;padding:8px 6px;border-bottom:1px solid var(--line);}
+  td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .sev{font-size:9px;letter-spacing:1px;padding:3px 7px;display:inline-block;}
+  .sev.high{background:rgba(255,68,68,.15);color:var(--red);border:1px solid var(--red);}
+  .sev.med{background:rgba(255,176,32,.15);color:var(--amber);border:1px solid var(--amber);}
+  .sev.low{background:rgba(212,255,31,.1);color:var(--acid);border:1px solid var(--acid);}
+  .reason{color:var(--gray);font-size:10px;max-width:280px;display:block;margin-top:3px;}
+  .row-actions{display:flex;gap:6px;white-space:nowrap;}
+  .btn-sm{
+    font-size:9px;letter-spacing:.5px;padding:5px 9px;border:1px solid var(--gray2);
+    background:transparent;color:var(--white);cursor:pointer;font-family:var(--mono);
+  }
+  .btn-sm.confirm{border-color:var(--acid);color:var(--acid);}
+  .btn-sm.confirm:hover{background:var(--acid);color:#000;}
+  .btn-sm.dismiss:hover{background:var(--line);}
+  .btn-sm:disabled{opacity:.35;cursor:default;}
+  tr.resolved td{opacity:.4;}
+  tr.resolved .row-actions{display:none;}
+  .resolved-tag{font-size:9px;color:var(--gray2);letter-spacing:1px;}
+  .agent-link{color:inherit;border-bottom:1px dashed var(--gray2);}
+  .agent-link:hover{color:var(--acid);border-color:var(--acid);}
+
+  /* AGENT STATUS LIST */
+  .astat{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dashed var(--line);transition:padding-left .2s ease;}
+  .astat:hover{padding-left:6px;border-bottom-color:var(--acid2);}
+  .astat:last-child{border-bottom:none;}
+  .astat .name{font-size:11px;}
+  .astat .name span{display:block;color:var(--gray2);font-size:9px;margin-top:2px;}
+  .pill{font-size:9px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--acid);color:var(--acid);}
+  .pill.idle{border-color:var(--gray2);color:var(--gray2);}
+
+  /* LOG */
+  .log{background:#000;border:1px solid var(--line);padding:14px;height:160px;overflow-y:auto;font-size:10px;color:var(--gray);margin-top:1px;}
+  .log p{margin-bottom:5px;}
+  .log .ok{color:var(--acid);}
+  .log .warn{color:var(--amber);}
+  .log .ts{color:var(--gray2);margin-right:6px;}
+
+  .conn-pill{font-size:9px;letter-spacing:1px;padding:5px 9px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--gray2);color:var(--gray2);}
+  .conn-pill.live{border-color:var(--acid);color:var(--acid);}
+  .conn-pill .blip{width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .empty-row td{color:var(--gray2);text-align:center;padding:24px 6px;font-size:11px;}
+
+  @media(max-width:900px){
+    .shell{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .panels{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+    <a class="back-link" href="cybersec-agents-landing.html">← BACK TO SITE</a>
+
+    <div class="nav-group">
+      <h6>MVP — LIVE</h6>
+      <a class="agent-item" href="agent.html?id=triage"><span><span class="dotstat on"></span><b>Triage</b></span> active</a>
+      <a class="agent-item" href="agent.html?id=network-recon"><span><span class="dotstat on"></span>Network Recon</span> sweeping</a>
+      <a class="agent-item" href="agent.html?id=vuln-scanner"><span><span class="dotstat on"></span>Vuln Scanner</span> active</a>
+      <a class="agent-item" href="agent.html?id=config-audit"><span><span class="dotstat on"></span>Config Audit</span> active</a>
+    </div>
+
+    <div class="nav-group">
+      <h6>ROADMAP — POST-MVP</h6>
+      <a class="agent-item" href="roadmap.html"><span><span class="dotstat idle"></span>+8 more agents</span> not yet live</a>
+    </div>
+
+    <div class="sidebar-foot">MVP PHASE — 4 AGENTS LIVE<br>v1 — CLASSIFY ONLY</div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>TRIAGE QUEUE</h1>
+        <div class="sub">Agent classifies and recommends. Nothing is closed or blocked without your confirmation.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <div class="scope-pill">● HUMAN-CONFIRM MODE — V1</div>
+        <div class="conn-pill" id="conn-pill"><span class="blip"></span><span id="conn-label">CONNECTING…</span></div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="num" id="kpi-ingested"><span class="countup" data-target="0">0</span></div><div class="lbl">ALERTS INGESTED (24H)</div></div>
+      <div class="kpi"><div class="num" id="kpi-queued"><span class="countup" data-target="0">0</span></div><div class="lbl">SENT TO QUEUE</div></div>
+      <div class="kpi bad"><div class="num" id="kpi-awaiting"><span class="countup" data-target="0">0</span></div><div class="lbl">AWAITING YOUR REVIEW</div></div>
+      <div class="kpi"><div class="num" id="kpi-noise"><span class="countup" data-target="0" data-decimals="1">0</span>%</div><div class="lbl">NOISE REDUCED</div></div>
+    </div>
+
+    <div class="panels">
+      <div class="panel">
+        <h2><b>/QUEUE</b> NEEDS REVIEW</h2>
+        <table>
+          <thead>
+            <tr><th>SEV</th><th>ALERT</th><th>AGENT RATIONALE</th><th>SOURCE</th><th></th></tr>
+          </thead>
+          <tbody id="queue-body">
+            <tr class="demo-row">
+              <td><span class="sev high">HIGH</span></td>
+              <td>Unusual privilege escalation — host WEB-03</td>
+              <td><span class="reason">New local admin created outside change window; no matching ticket. Confidence: 0.81</span></td>
+              <td><a class="agent-link" href="agent.html?id=triage">EDR</a></td>
+              <td class="row-actions">
+                <button class="btn-sm confirm">ESCALATE</button>
+                <button class="btn-sm dismiss">DISMISS</button>
+              </td>
+            </tr>
+            <tr class="demo-row">
+              <td><span class="sev med">MED</span></td>
+              <td>Repeated failed logins — VPN gateway</td>
+              <td><span class="reason">42 attempts, single source IP, no successful login. Pattern resembles credential stuffing. Confidence: 0.74</span></td>
+              <td><a class="agent-link" href="agent.html?id=triage">SIEM</a></td>
+              <td class="row-actions">
+                <button class="btn-sm confirm">ESCALATE</button>
+                <button class="btn-sm dismiss">DISMISS</button>
+              </td>
+            </tr>
+            <tr class="demo-row">
+              <td><span class="sev low">LOW</span></td>
+              <td>New open port detected — 10.0.4.18:8081</td>
+              <td><span class="reason">Not in last week's baseline scan. Likely a dev service, but unverified. Confidence: 0.55</span></td>
+              <td><a class="agent-link" href="agent.html?id=network-recon">NETWORK_RECON</a></td>
+              <td class="row-actions">
+                <button class="btn-sm confirm">ESCALATE</button>
+                <button class="btn-sm dismiss">DISMISS</button>
+              </td>
+            </tr>
+            <tr class="demo-row">
+              <td><span class="sev high">HIGH</span></td>
+              <td>Critical CVE match — nginx 1.18.0 on LB-01</td>
+              <td><span class="reason">CVE-2024-XXXX, remote exploit, public PoC exists. Patch staged, awaiting approval window. Confidence: 0.93</span></td>
+              <td><a class="agent-link" href="agent.html?id=vuln-scanner">VULN_SCANNER</a></td>
+              <td class="row-actions">
+                <button class="btn-sm confirm">ESCALATE</button>
+                <button class="btn-sm dismiss">DISMISS</button>
+              </td>
+            </tr>
+            <tr class="demo-row">
+              <td><span class="sev low">LOW</span></td>
+              <td>Config drift — S3 bucket ACL changed</td>
+              <td><span class="reason">Bucket "logs-archive" made public-read 14 min ago. No matching change ticket. Confidence: 0.69</span></td>
+              <td><a class="agent-link" href="agent.html?id=config-audit">CONFIG_AUDIT</a></td>
+              <td class="row-actions">
+                <button class="btn-sm confirm">ESCALATE</button>
+                <button class="btn-sm dismiss">DISMISS</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2><b>/STATUS</b> AGENT HEALTH</h2>
+        <a class="astat" href="agent.html?id=triage"><div class="name">Triage Agent<span>last run 12s ago</span></div><div class="pill">ACTIVE</div></a>
+        <a class="astat" href="agent.html?id=network-recon"><div class="name">Network Recon<span>sweeping verified assets</span></div><div class="pill">ACTIVE</div></a>
+        <a class="astat" href="agent.html?id=vuln-scanner"><div class="name">Vuln Scanner<span>scanning open ports</span></div><div class="pill">ACTIVE</div></a>
+        <a class="astat" href="agent.html?id=config-audit"><div class="name">Config Audit<span>next sweep in 10m</span></div><div class="pill idle">IDLE</div></a>
+
+        <h2 style="margin-top:22px;"><b>/LOG</b> ACTIVITY</h2>
+        <div class="log" id="log">
+          <p><span class="ts">23:46:58</span><span class="ok">[TRIAGE]</span> dedup'd 14 alerts from WEB-03 → 1 incident</p>
+          <p><span class="ts">23:45:31</span><span class="ok">[VULN_SCANNER]</span> scan complete: 14 assets, 3 findings</p>
+          <p><span class="ts">23:41:18</span><span class="ok">[CONFIG_AUDIT]</span> detected ACL change on logs-archive</p>
+          <p><span class="ts">23:38:50</span><span class="ok">[TRIAGE]</span> auto-resolved 19 alerts (known-benign rule match)</p>
+          <p><span class="ts">23:35:02</span><span class="ok">[NETWORK_RECON]</span> swept 14 assets — 0 new ports since baseline</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="shared.js"></script>
+<script>
+// ===== Backend wiring =====
+// Point this at wherever the FastAPI service is running. Defaults to local
+// dev. For a deployed dashboard, change this to the real API host (or load
+// it from a small config endpoint / build-time env var).
+const API_BASE = window.SENTINEL_API_BASE || 'http://localhost:8000';
+
+const SOURCE_TO_AGENT = {
+  EDR: 'triage', SIEM: 'triage',
+  VULN_SCANNER: 'vuln-scanner', NETWORK_RECON: 'network-recon',
+  CONFIG_AUDIT: 'config-audit',
+};
+function agentSlugFor(source){ return SOURCE_TO_AGENT[source] || 'triage'; }
+
+const log = document.getElementById('log');
+function logLine(tag, msg, cls='ok'){
+  const p=document.createElement('p');
+  const t=new Date().toTimeString().slice(0,8);
+  p.innerHTML=`<span class="ts">${t}</span><span class="${cls}">[${tag}]</span> ${msg}`;
+  log.prepend(p);
+}
+
+function setConn(live){
+  const pill = document.getElementById('conn-pill');
+  const label = document.getElementById('conn-label');
+  pill.classList.toggle('live', live);
+  label.textContent = live ? 'LIVE — API CONNECTED' : 'OFFLINE — SHOWING DEMO DATA';
+}
+
+function setKpi(id, value){
+  const wrap = document.getElementById(id);
+  const span = wrap.querySelector('.countup');
+  span.dataset.target = value;
+  span.textContent = '0';
+  // re-run the same easing animation shared.js uses for count-ups
+  const target = parseFloat(value);
+  const decimals = parseInt(span.dataset.decimals || '0', 10);
+  const start = performance.now();
+  function step(now){
+    const p = Math.min((now-start)/900,1);
+    const eased = 1-Math.pow(1-p,3);
+    const val = target*eased;
+    span.textContent = decimals ? val.toFixed(decimals) : Math.round(val).toLocaleString();
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+async function loadKpis(){
+  const r = await fetch(`${API_BASE}/alerts/kpis`);
+  if(!r.ok) throw new Error('kpis failed');
+  const k = await r.json();
+  setKpi('kpi-ingested', k.ingested_24h);
+  setKpi('kpi-queued', k.sent_to_queue);
+  setKpi('kpi-awaiting', k.awaiting_review);
+  setKpi('kpi-noise', k.noise_reduced_pct);
+}
+
+function renderRow(alert){
+  const tr = document.createElement('tr');
+  tr.dataset.id = alert.id;
+  tr.innerHTML = `
+    <td><span class="sev ${alert.severity}">${alert.severity.toUpperCase()}</span></td>
+    <td>${alert.description}</td>
+    <td><span class="reason">${alert.rationale} Confidence: ${alert.confidence?.toFixed(2) ?? '—'}</span></td>
+    <td><a class="agent-link" href="agent.html?id=${agentSlugFor(alert.source)}">${alert.source}</a></td>
+    <td class="row-actions">
+      <button class="btn-sm confirm">ESCALATE</button>
+      <button class="btn-sm dismiss">DISMISS</button>
+    </td>`;
+  return tr;
+}
+
+async function loadQueue(){
+  const r = await fetch(`${API_BASE}/alerts?status=classified`);
+  if(!r.ok) throw new Error('alerts failed');
+  const alerts = (await r.json()).filter(a => !a.resolution);
+  const body = document.getElementById('queue-body');
+  body.innerHTML = '';
+  if(alerts.length === 0){
+    body.innerHTML = '<tr class="empty-row"><td colspan="5">No alerts awaiting review. Queue is clear.</td></tr>';
+    return;
+  }
+  alerts.forEach(a => body.appendChild(renderRow(a)));
+}
+
+async function resolveAlert(id, action){
+  const r = await fetch(`${API_BASE}/alerts/${id}/${action}`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({resolved_by:'operator@dashboard'}),
+  });
+  if(!r.ok) throw new Error(`${action} failed`);
+  return r.json();
+}
+
+// event delegation so it works for dynamically-rendered rows
+document.getElementById('queue-body').addEventListener('click', async (e)=>{
+  const btn = e.target.closest('.btn-sm');
+  if(!btn) return;
+  const row = btn.closest('tr');
+  const isLive = document.getElementById('conn-pill').classList.contains('live');
+  const action = btn.classList.contains('confirm') ? 'confirm' : 'dismiss';
+  const label = action === 'confirm' ? 'ESCALATED' : 'DISMISSED';
+
+  row.classList.add('resolved');
+  const cell = row.querySelector('.row-actions');
+  cell.innerHTML = `<span class="resolved-tag">✓ ${label} BY YOU</span>`;
+  logLine('HUMAN', `${action === 'confirm' ? 'confirmed escalation' : 'dismissed'} "${row.children[1].textContent}"`, action === 'confirm' ? 'ok' : 'warn');
+
+  if(isLive && row.dataset.id){
+    try {
+      await resolveAlert(row.dataset.id, action);
+      loadKpis();
+    } catch(err){
+      logLine('SYSTEM', `failed to sync "${action}" to backend — ${err.message}`, 'warn');
+    }
+  }
+});
+
+async function init(){
+  try {
+    await Promise.all([loadKpis(), loadQueue()]);
+    setConn(true);
+    logLine('SYSTEM', 'connected to live backend at ' + API_BASE);
+  } catch(err){
+    setConn(false);
+    logLine('SYSTEM', 'could not reach backend — showing static demo data', 'warn');
+  }
+}
+init();
+// poll for new alerts every 15s while connected
+setInterval(()=>{
+  if(document.getElementById('conn-pill').classList.contains('live')){
+    loadKpis().catch(()=>setConn(false));
+    loadQueue().catch(()=>setConn(false));
+  }
+}, 15000);
+</script>
+
+</body>
+</html>

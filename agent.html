@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .ahero{padding:60px 24px 40px;border-bottom:1px solid var(--line);}
+  .ahero .crumb{font-size:11px;color:var(--gray2);letter-spacing:1px;margin-bottom:24px;}
+  .ahero .crumb a:hover{color:var(--acid);}
+  .ahead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+  .ahead .tagrow{display:flex;gap:8px;margin-bottom:18px;}
+  .tier-chip{font-size:9px;letter-spacing:1px;padding:4px 9px;border:1px solid var(--gray2);color:var(--gray);}
+  .tier-chip.strategic{border-color:var(--acid);color:var(--acid);}
+  .tier-chip.tactical{border-color:var(--amber);color:var(--amber);}
+  .flag-chip{font-size:9px;letter-spacing:1px;padding:4px 9px;border:1px solid var(--acid);color:#000;background:var(--acid);}
+  .roadmap-chip{font-size:9px;letter-spacing:1px;padding:4px 9px;border:1px solid var(--amber);color:var(--amber);}
+  .roadmap-banner{margin:0 24px;padding:14px 18px;border:1px dashed var(--amber);color:var(--amber);font-size:12px;background:rgba(255,176,32,0.06);}
+  .roadmap-banner a{color:var(--amber);text-decoration:underline;}
+  .ahero h1{font-family:var(--display);font-weight:400;font-size:42px;text-transform:uppercase;letter-spacing:-1px;margin-bottom:14px;}
+  .ahero .tagline{color:var(--gray);max-width:560px;font-size:13px;}
+  .statbox{border:1px solid var(--line);padding:16px 20px;min-width:140px;}
+  .statbox .num{font-family:var(--display);font-size:22px;color:var(--acid);}
+  .statbox .lbl{font-size:9px;color:var(--gray2);letter-spacing:1px;margin-top:4px;}
+
+  .abody{display:grid;grid-template-columns:1.6fr 1fr;gap:1px;background:var(--line);}
+  .apanel{background:var(--bg);padding:36px 24px;}
+  .apanel h2{font-size:12px;letter-spacing:2px;color:var(--gray);margin-bottom:18px;text-transform:uppercase;}
+  .apanel h2 b{color:var(--acid);margin-right:6px;}
+  .apanel p{color:var(--gray);font-size:13px;margin-bottom:14px;max-width:640px;}
+  .iolist{list-style:none;margin-bottom:28px;}
+  .iolist li{font-size:12px;color:var(--white);padding:9px 0;border-bottom:1px dashed var(--line);display:flex;gap:10px;}
+  .iolist li span{color:var(--acid);}
+
+  .sidefacts{display:flex;flex-direction:column;gap:0;}
+  .fact{padding:14px 0;border-bottom:1px dashed var(--line);}
+  .fact .k{font-size:9px;color:var(--gray2);letter-spacing:1px;margin-bottom:5px;}
+  .fact .v{font-size:13px;color:var(--white);}
+  .fact .v.acid{color:var(--acid);}
+
+  .related{padding:60px 24px 70px;}
+  .related h2{font-size:12px;letter-spacing:2px;color:var(--gray);margin-bottom:28px;text-transform:uppercase;}
+  .related h2 b{color:var(--acid);margin-right:6px;}
+  .relgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);}
+  .relcard{background:var(--bg);padding:18px;transition:transform .2s ease, box-shadow .2s ease;}
+  .relcard:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--acid);}
+  .relcard .rtier{font-size:9px;color:var(--gray2);letter-spacing:1px;margin-bottom:8px;}
+  .relcard h4{font-size:12px;text-transform:uppercase;margin-bottom:6px;}
+  .relcard p{font-size:11px;color:var(--gray);}
+
+  .notfound{padding:120px 24px;text-align:center;}
+  .notfound h1{font-family:var(--display);font-size:32px;margin-bottom:16px;}
+  .notfound p{color:var(--gray);margin-bottom:24px;}
+
+  @media(max-width:900px){
+    .abody{grid-template-columns:1fr;}
+    .relgrid{grid-template-columns:1fr 1fr;}
+    .ahero h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="cybersec-agents-landing.html" class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</a>
+    <div class="navlinks">
+      <a href="work.html"><span>01</span>WORK</a>
+      <a href="services.html"><span>02</span>SERVICES</a>
+      <a href="about.html"><span>03</span>ABOUT</a>
+      <a href="dashboard.html"><span>04</span>LABS</a>
+      <a href="roadmap.html"><span>05</span>ROADMAP</a>
+      <a href="contact.html"><span>06</span>CONTACT</a>
+    </div>
+    <div class="nav-right"><span id="clock">00:00:00</span></div>
+  </nav>
+</header>
+
+<div id="app"></div>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <div class="flogo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+      <p style="color:var(--gray);font-size:12px;max-width:280px;">AI agents that triage real threats, so your team stops drowning in alerts.</p>
+      <div class="map"><i style="top:30%;left:20%;"></i><i style="top:60%;left:55%;"></i><i style="top:40%;left:80%;"></i></div>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Live MVP Agents</h5>
+      <ul>
+        <li><a href="agent.html?id=triage">Triage</a></li>
+        <li><a href="agent.html?id=network-recon">Network Recon</a></li>
+        <li><a href="agent.html?id=vuln-scanner">Vuln Scanner</a></li>
+        <li><a href="agent.html?id=config-audit">Config Audit</a></li>
+        <li><a href="roadmap.html">+8 more on roadmap →</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Status</h5>
+      <ul>
+        <li><a href="dashboard.html">● All systems operational</a></li>
+        <li><a href="contact.html">support@sentinel-agents.io</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="stripe-bar"></div>
+
+<script src="shared.js"></script>
+<script>
+const AGENTS = {
+  triage: {
+    tier:'strategic', flag:'FLAGSHIP / V1', mvp:true, name:'Triage Agent',
+    tagline:'Reads every alert across your stack, classifies it, and tells you exactly what matters — before a human ever looks at the queue.',
+    desc:'Triage is the front door for every signal entering SENTINEL_AGENTS. It ingests alerts from EDR, SIEM, email security, and cloud config tools, then scores each one using a hybrid of deterministic rules (known-benign patterns, asset criticality, time-of-day baselines) and an LLM reasoning pass that reads the raw alert context the way an analyst would. V1 is classify-only: Triage recommends an action and a confidence score, but a human confirms every escalation or dismissal before anything closes.',
+    inputs:['EDR / SIEM alert streams','Email security quarantine events','Cloud config-change events','Asset criticality registry'],
+    outputs:['Severity-scored queue item','Plain-English rationale','Confidence score (0–1)','Suggested action: escalate / dismiss'],
+    autonomy:'Classify only — human confirms', confidence:'0.81 avg', runs:'Continuous', stat:{num:'1,204', lbl:'ALERTS / DAY'},
+    related:['orchestrator','vuln-scanner','phishing-defense','incident-report']
+  },
+  orchestrator: {
+    tier:'strategic', flag:null, mvp:false, name:'Orchestrator Agent',
+    tagline:'Routes classified alerts to the right specialist agent and keeps every queue inside its SLA.',
+    desc:'Orchestrator sits behind Triage and decides which downstream strategic agent should own a given finding — Patch & Vuln, Phishing Defense, Incident Report, or Compliance Audit. It tracks SLA timers per queue, rebalances load when one agent falls behind, and is the only agent with visibility across all other agents\' queues simultaneously.',
+    inputs:['Triage-classified queue items','Per-agent SLA targets','Live agent health signals'],
+    outputs:['Routed work items','SLA breach warnings','Cross-agent load report'],
+    autonomy:'Fully automated routing', confidence:'n/a', runs:'Continuous', stat:{num:'6', lbl:'QUEUES MANAGED'},
+    related:['triage','incident-report','compliance-audit','threat-intel']
+  },
+  'patch-vuln': {
+    tier:'strategic', flag:null, mvp:false, name:'Patch & Vuln Agent',
+    tagline:'Turns raw vulnerability scan output into a prioritized, business-aware patch plan.',
+    desc:'Patch & Vuln consumes findings from the tactical Vuln Scanner and cross-references CVE severity, exploit availability, and asset criticality to build a ranked remediation plan. It stages patch windows and drafts the change ticket — a human approves before anything is pushed to production.',
+    inputs:['Vuln Scanner findings','CVE/NVD feed','Asset criticality registry','Maintenance window calendar'],
+    outputs:['Ranked patch plan','Drafted change ticket','Risk-adjusted priority score'],
+    autonomy:'Plan only — human approves', confidence:'0.93 avg', runs:'Daily', stat:{num:'4', lbl:'QUEUED PATCHES'},
+    related:['vuln-scanner','orchestrator','compliance-audit','config-audit']
+  },
+  'endpoint-watch': {
+    tier:'strategic', flag:null, mvp:false, name:'Endpoint Watch Agent',
+    tagline:'Watches endpoint telemetry for behavior that doesn\'t match the baseline — privilege escalation, odd process trees, persistence techniques.',
+    desc:'Endpoint Watch builds a rolling behavioral baseline per host and flags deviations: a new local admin account, an unsigned binary spawning a shell, a scheduled task created outside a change window. It hands flagged events to Triage rather than acting directly, keeping the same human-confirm model.',
+    inputs:['EDR process & auth telemetry','Local baseline model per host','Change ticket system'],
+    outputs:['Behavioral anomaly flags','Host risk score','Context bundle for Triage'],
+    autonomy:'Detect & forward — human confirms', confidence:'0.77 avg', runs:'Continuous', stat:{num:'312', lbl:'HOSTS MONITORED'},
+    related:['triage','log-forensics','network-recon','orchestrator']
+  },
+  'phishing-defense': {
+    tier:'strategic', flag:null, mvp:false, name:'Phishing Defense Agent',
+    tagline:'Quarantines suspicious mail automatically, then waits for a human to confirm before permanently blocking a sender.',
+    desc:'Phishing Defense inspects inbound mail for spoofed domains, macro-enabled attachments, and credential-harvesting links. Suspicious mail is held in quarantine immediately — that\'s a reversible, low-risk action — but permanent sender blocks and org-wide rule changes require explicit human confirmation.',
+    inputs:['Inbound mail gateway feed','Domain reputation feeds','Attachment sandbox results'],
+    outputs:['Quarantine action','Sender block recommendation','Phishing campaign cluster report'],
+    autonomy:'Auto-quarantine, human confirms blocks', confidence:'0.88 avg', runs:'Continuous', stat:{num:'1', lbl:'ITEMS ON HOLD'},
+    related:['triage','threat-intel','incident-report','orchestrator']
+  },
+  'incident-report': {
+    tier:'strategic', flag:null, mvp:false, name:'Incident Report Agent',
+    tagline:'Writes the timeline, impact summary, and remediation log for every confirmed incident — so nobody has to do it at 2am.',
+    desc:'Once an incident is confirmed, Incident Report assembles a full timeline from every agent and tool that touched it: first detection, triage rationale, human decisions, remediation steps, and final state. Output is a draft report a human reviews and signs off before it goes to compliance or leadership.',
+    inputs:['Confirmed incident timeline','Cross-agent action logs','Asset & ownership registry'],
+    outputs:['Draft incident report','Impact summary','Remediation timeline'],
+    autonomy:'Draft only — human signs off', confidence:'n/a', runs:'On incident close', stat:{num:'0', lbl:'OPEN INCIDENTS'},
+    related:['orchestrator','triage','compliance-audit','phishing-defense']
+  },
+  'compliance-audit': {
+    tier:'strategic', flag:null, mvp:false, name:'Compliance Audit Agent',
+    tagline:'Continuously checks your environment against SOC 2 / ISO 27001 control requirements and flags drift.',
+    desc:'Compliance Audit maps your actual infrastructure and policy state against the control library for your target frameworks, flags gaps as they appear (not just at audit time), and produces evidence packages an auditor can actually use — pulled live from Config Audit and your asset registry.',
+    inputs:['Config Audit findings','Control framework library (SOC 2, ISO 27001)','Policy documents'],
+    outputs:['Control gap report','Evidence package','Drift alert'],
+    autonomy:'Report only — human remediates', confidence:'0.85 avg', runs:'Daily', stat:{num:'2', lbl:'OPEN GAPS'},
+    related:['config-audit','patch-vuln','incident-report','orchestrator']
+  },
+  'threat-intel': {
+    tier:'strategic', flag:null, mvp:false, name:'Threat Intel Agent',
+    tagline:'Pulls in external threat feeds and tells you which ones actually apply to your environment.',
+    desc:'Threat Intel ingests CVE feeds, vendor advisories, and dark-web chatter summaries, then filters for relevance against your actual asset inventory — so you see the three CVEs that matter, not the three hundred that don\'t. Relevant findings are pushed to Patch & Vuln and Phishing Defense automatically.',
+    inputs:['CVE/NVD feed','Vendor security advisories','Asset inventory'],
+    outputs:['Relevance-filtered threat brief','Pushed alerts to downstream agents'],
+    autonomy:'Fully automated filtering', confidence:'n/a', runs:'Continuous', stat:{num:'14', lbl:'FEEDS TRACKED'},
+    related:['patch-vuln','phishing-defense','orchestrator','vuln-scanner']
+  },
+  'network-recon': {
+    tier:'tactical', flag:null, mvp:true, name:'Network Recon Agent',
+    tagline:'Runs scoped nmap-style sweeps against your authorized asset registry to catch new or changed open ports.',
+    desc:'Network Recon executes scheduled and on-demand network sweeps — open port discovery, service fingerprinting, baseline comparison — strictly within the scope defined by your asset registry. Every scan target must carry a verified ownership signal (DNS TXT record or signed cloud IAM role) before it\'s eligible to be scanned. Findings outside the established baseline route to Triage.',
+    inputs:['Asset registry (verified scope)','Previous scan baseline','Scan schedule / rate limits'],
+    outputs:['New/changed port findings','Service fingerprint diff','Scope violation alerts'],
+    autonomy:'Scan only — read-only', confidence:'0.69 avg', runs:'Every 2h', stat:{num:'14', lbl:'ASSETS IN SCOPE'},
+    related:['vuln-scanner','config-audit','endpoint-watch','triage']
+  },
+  'vuln-scanner': {
+    tier:'tactical', flag:null, mvp:true, name:'Vuln Scanner Agent',
+    tagline:'Runs authenticated and unauthenticated vulnerability scans and matches findings to live CVEs with exploit data.',
+    desc:'Vuln Scanner performs real scans — version fingerprinting, known-CVE matching, misconfiguration checks — against every asset in your registry, then enriches each finding with exploit availability and public PoC status before handing off to Patch & Vuln. Read-only by design; it never modifies anything it scans.',
+    inputs:['Asset registry (verified scope)','CVE/NVD feed','Exploit-DB / PoC trackers'],
+    outputs:['Vulnerability findings','CVE match + exploit status','Scan coverage report'],
+    autonomy:'Scan only — read-only', confidence:'0.93 avg', runs:'Daily', stat:{num:'3', lbl:'NEW FINDINGS'},
+    related:['patch-vuln','network-recon','threat-intel','config-audit']
+  },
+  'config-audit': {
+    tier:'tactical', flag:null, mvp:true, name:'Config Audit Agent',
+    tagline:'Checks cloud and infra configuration against secure baselines — public buckets, open security groups, weak IAM policies.',
+    desc:'Config Audit runs continuous configuration checks across cloud providers and infra-as-code, comparing live state against secure baselines (CIS benchmarks and custom org policy). It catches drift the moment it happens — like an S3 bucket flipped to public-read — and forwards findings to both Triage and Compliance Audit.',
+    inputs:['Cloud provider API (read-only role)','CIS benchmark library','Org-specific policy rules'],
+    outputs:['Config drift findings','Misconfiguration severity score','Compliance evidence feed'],
+    autonomy:'Scan only — read-only', confidence:'0.69 avg', runs:'Continuous', stat:{num:'1', lbl:'DRIFT EVENT TODAY'},
+    related:['compliance-audit','patch-vuln','network-recon','triage']
+  },
+  'log-forensics': {
+    tier:'tactical', flag:null, mvp:false, name:'Log Forensics Agent',
+    tagline:'Runs deep, on-demand log correlation across hosts when an incident needs a real timeline — not a guess.',
+    desc:'Log Forensics is invoked by Incident Report or a human analyst when a finding needs deeper investigation. It pulls and correlates logs across the asset registry — auth events, process trees, network flows — to reconstruct a precise timeline, then hands a structured forensic summary back to whoever requested it.',
+    inputs:['Host/system logs (verified scope)','Incident timeline request','Correlation rule set'],
+    outputs:['Correlated event timeline','Forensic summary','Evidence bundle'],
+    autonomy:'On-demand, read-only', confidence:'n/a', runs:'On request', stat:{num:'0', lbl:'ACTIVE REQUESTS'},
+    related:['incident-report','endpoint-watch','triage','network-recon']
+  }
+};
+
+const params = new URLSearchParams(location.search);
+const id = params.get('id');
+const a = AGENTS[id];
+const app = document.getElementById('app');
+
+function tierLabel(t){ return t==='strategic' ? 'STRATEGIC LAYER' : 'TACTICAL LAYER'; }
+
+if(!a){
+  app.innerHTML = `
+    <div class="notfound">
+      <h1>AGENT NOT FOUND</h1>
+      <p>That agent ID doesn't match anything in the roster.</p>
+      <a class="cta-btn" href="work.html">← VIEW FULL ROSTER</a>
+    </div>`;
+} else {
+  document.title = `SENTINEL_AGENTS // ${a.name}`;
+  app.innerHTML = `
+    <section class="ahero">
+      <div class="crumb"><a href="cybersec-agents-landing.html">HOME</a> / <a href="work.html">WORK</a> / ${a.name.toUpperCase()}</div>
+      <div class="ahead">
+        <div>
+          <div class="tagrow">
+            <span class="tier-chip ${a.tier}">${tierLabel(a.tier)}</span>
+            ${a.flag ? `<span class="flag-chip">${a.flag}</span>` : ''}
+            ${!a.mvp ? `<span class="roadmap-chip">ROADMAP — POST-MVP</span>` : ''}
+          </div>
+          <h1>${a.name}</h1>
+          <p class="tagline">${a.tagline}</p>
+        </div>
+        <div class="statbox">
+          <div class="num countup" data-target="${parseFloat(a.stat.num.replace(/,/g,''))}">0</div>
+          <div class="lbl">${a.stat.lbl}</div>
+        </div>
+      </div>
+    </section>
+
+    ${!a.mvp ? `<div class="roadmap-banner" style="margin-top:24px;">▮ This agent is on the post-MVP roadmap — not yet live. We're launching with 4 core agents first to prove this out. <a href="roadmap.html">See the full roadmap →</a></div>` : ''}
+
+    <div class="abody">
+      <div class="apanel">
+        <h2><b>/01</b> WHAT IT DOES</h2>
+        <p>${a.desc}</p>
+
+        <h2 style="margin-top:30px;"><b>/02</b> INPUTS</h2>
+        <ul class="iolist">${a.inputs.map(i=>`<li><span>→</span>${i}</li>`).join('')}</ul>
+
+        <h2><b>/03</b> OUTPUTS</h2>
+        <ul class="iolist">${a.outputs.map(o=>`<li><span>→</span>${o}</li>`).join('')}</ul>
+      </div>
+      <div class="apanel">
+        <h2><b>/SPEC</b> AT A GLANCE</h2>
+        <div class="sidefacts">
+          <div class="fact"><div class="k">AUTONOMY LEVEL</div><div class="v acid">${a.autonomy}</div></div>
+          <div class="fact"><div class="k">AVG CONFIDENCE</div><div class="v">${a.confidence}</div></div>
+          <div class="fact"><div class="k">RUN CADENCE</div><div class="v">${a.runs}</div></div>
+          <div class="fact"><div class="k">TIER</div><div class="v">${tierLabel(a.tier)}</div></div>
+        </div>
+        <a class="cta-btn" style="margin-top:26px;width:100%;justify-content:center;" href="dashboard.html">VIEW LIVE QUEUE →</a>
+      </div>
+    </div>
+
+    <section class="related">
+      <h2><b>/RELATED</b> WORKS WITH</h2>
+      <div class="relgrid">
+        ${a.related.map(rid=>{
+          const r = AGENTS[rid];
+          if(!r) return '';
+          return `<a class="relcard reveal" href="agent.html?id=${rid}">
+            <div class="rtier">${tierLabel(r.tier)}${!r.mvp ? ' · ROADMAP' : ''}</div>
+            <h4>${r.name}</h4>
+            <p>${r.tagline.slice(0,70)}…</p>
+          </a>`;
+        }).join('')}
+      </div>
+    </section>
+  `;
+
+  // re-run reveal/countup observers since content was injected after shared.js executed
+  const revealEls = app.querySelectorAll('.reveal');
+  const countEls = app.querySelectorAll('.countup');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }), {threshold:.15});
+    revealEls.forEach(el=>io.observe(el));
+  } else { revealEls.forEach(el=>el.classList.add('in')); }
+  countEls.forEach(el=>{
+    const target = parseFloat(el.dataset.target);
+    const start = performance.now();
+    function step(now){
+      const p = Math.min((now-start)/1200,1);
+      const eased = 1-Math.pow(1-p,3);
+      el.textContent = Math.round(target*eased).toLocaleString();
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+</script>
+
+</body>
+</html>

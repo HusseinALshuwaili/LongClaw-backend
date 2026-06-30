@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .cwrap{padding:60px 24px 80px;display:grid;grid-template-columns:1.3fr 1fr;gap:1px;background:var(--line);}
+  .cpanel{background:var(--bg);padding:36px;}
+  @media(max-width:900px){ .cwrap{grid-template-columns:1fr;} }
+
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-size:10px;letter-spacing:1px;color:var(--gray2);margin-bottom:8px;}
+  .field input, .field select, .field textarea{
+    width:100%;background:#000;border:1px solid var(--line);color:var(--white);
+    font-family:var(--mono);font-size:13px;padding:11px 12px;transition:border-color .2s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{outline:none;border-color:var(--acid);}
+  .field textarea{resize:vertical;min-height:110px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:600px){ .row2{grid-template-columns:1fr;} }
+
+  .submitmsg{display:none;border:1px solid var(--acid);color:var(--acid);padding:14px 16px;font-size:12px;margin-top:6px;}
+  .submitmsg.show{display:block;}
+
+  .contactfacts{display:flex;flex-direction:column;gap:0;}
+  .cfact{padding:16px 0;border-bottom:1px dashed var(--line);}
+  .cfact .k{font-size:9px;color:var(--gray2);letter-spacing:1px;margin-bottom:6px;}
+  .cfact .v{font-size:14px;}
+  .cfact .v a:hover{color:var(--acid);}
+  .cpanel h2{font-size:12px;letter-spacing:2px;color:var(--gray);margin-bottom:20px;text-transform:uppercase;}
+  .cpanel h2 b{color:var(--acid);margin-right:6px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="cybersec-agents-landing.html" class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</a>
+    <div class="navlinks">
+      <a href="work.html"><span>01</span>WORK</a>
+      <a href="services.html"><span>02</span>SERVICES</a>
+      <a href="about.html"><span>03</span>ABOUT</a>
+      <a href="dashboard.html"><span>04</span>LABS</a>
+      <a href="roadmap.html"><span>05</span>ROADMAP</a>
+      <a href="contact.html"><span>06</span>CONTACT</a>
+    </div>
+    <div class="nav-right"><span id="clock">00:00:00</span></div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="tag"><b>/01</b> GET IN TOUCH</div>
+  <h1>SCOPE YOUR PILOT<br>IN UNDER 24 HOURS.</h1>
+  <p>Tell us about your stack and the assets you want covered — we'll come back with which agents fit and what onboarding looks like.</p>
+</section>
+
+<section class="cwrap">
+  <div class="cpanel">
+    <h2><b>/02</b> SEND A MESSAGE</h2>
+    <form id="contact-form">
+      <div class="row2">
+        <div class="field"><label>NAME</label><input type="text" required placeholder="Jane Doe"></div>
+        <div class="field"><label>WORK EMAIL</label><input type="email" required placeholder="jane@company.com"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>COMPANY</label><input type="text" placeholder="Company Inc."></div>
+        <div class="field"><label>TEAM SIZE</label>
+          <select>
+            <option>1–10</option>
+            <option>11–50</option>
+            <option>51–200</option>
+            <option>200+</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>INTERESTED IN</label>
+        <select>
+          <option>Starter</option>
+          <option selected>Growth</option>
+          <option>Enterprise</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="field"><label>WHAT DO YOU WANT COVERED?</label><textarea placeholder="e.g. EDR triage, cloud config drift, weekly vuln scans on 30 assets..."></textarea></div>
+      <button type="submit" class="cta-btn" style="width:100%;justify-content:center;">SEND MESSAGE →</button>
+      <div class="submitmsg" id="submit-msg">✓ Message received. We'll reply within one business day.</div>
+    </form>
+  </div>
+
+  <div class="cpanel">
+    <h2><b>/03</b> DIRECT CHANNELS</h2>
+    <div class="contactfacts">
+      <div class="cfact"><div class="k">EMAIL</div><div class="v"><a href="mailto:support@sentinel-agents.io">support@sentinel-agents.io</a></div></div>
+      <div class="cfact"><div class="k">SALES</div><div class="v"><a href="mailto:sales@sentinel-agents.io">sales@sentinel-agents.io</a></div></div>
+      <div class="cfact"><div class="k">SECURITY DISCLOSURES</div><div class="v"><a href="mailto:security@sentinel-agents.io">security@sentinel-agents.io</a></div></div>
+      <div class="cfact"><div class="k">RESPONSE TIME</div><div class="v">Within 1 business day</div></div>
+      <div class="cfact"><div class="k">LIVE STATUS</div><div class="v"><a href="dashboard.html">→ View dashboard</a></div></div>
+      <div class="cfact"><div class="k">PRICING</div><div class="v"><a href="services.html">→ See plans</a></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <div class="flogo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+      <p style="color:var(--gray);font-size:12px;max-width:280px;">AI agents that triage real threats, so your team stops drowning in alerts.</p>
+      <div class="map"><i style="top:30%;left:20%;"></i><i style="top:60%;left:55%;"></i><i style="top:40%;left:80%;"></i></div>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Live MVP Agents</h5>
+      <ul>
+        <li><a href="agent.html?id=triage">Triage</a></li>
+        <li><a href="agent.html?id=network-recon">Network Recon</a></li>
+        <li><a href="agent.html?id=vuln-scanner">Vuln Scanner</a></li>
+        <li><a href="agent.html?id=config-audit">Config Audit</a></li>
+        <li><a href="roadmap.html">+8 more on roadmap →</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Status</h5>
+      <ul>
+        <li><a href="dashboard.html">● All systems operational</a></li>
+        <li><a href="contact.html">support@sentinel-agents.io</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="stripe-bar"></div>
+
+<script src="shared.js"></script>
+<script>
+document.getElementById('contact-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementById('submit-msg').classList.add('show');
+  this.querySelector('button[type="submit"]').textContent = '✓ SENT';
+  this.querySelector('button[type="submit"]').disabled = true;
+});
+</script>
+
+</body>
+</html>

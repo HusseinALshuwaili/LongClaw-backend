@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // About</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .mission{padding:60px 24px 70px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:50px;}
+  .mission h2{font-family:var(--display);font-size:28px;text-transform:uppercase;margin-bottom:18px;letter-spacing:-.5px;}
+  .mission p{color:var(--gray);font-size:13px;max-width:480px;margin-bottom:14px;}
+  @media(max-width:900px){ .mission{grid-template-columns:1fr;} }
+
+  .stats-row{padding:50px 24px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);}
+  .srow-item{background:var(--bg);padding:24px;text-align:center;}
+  .srow-item .num{font-family:var(--display);font-size:30px;color:var(--acid);}
+  .srow-item .lbl{font-size:10px;color:var(--gray2);letter-spacing:1px;margin-top:6px;}
+  @media(max-width:900px){ .stats-row{grid-template-columns:1fr 1fr;} }
+
+  .principles2{padding:60px 24px 80px;}
+  .pgrid2{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:30px;}
+  @media(max-width:900px){ .pgrid2{grid-template-columns:1fr;} }
+
+  .timeline{padding:60px 24px 80px;border-top:1px solid var(--line);}
+  .tl-item{display:grid;grid-template-columns:100px 1fr;gap:20px;padding:18px 0;border-bottom:1px dashed var(--line);}
+  .tl-item .tly{color:var(--acid);font-family:var(--display);font-size:14px;}
+  .tl-item .tlc h4{font-size:13px;margin-bottom:4px;}
+  .tl-item .tlc p{font-size:12px;color:var(--gray);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="cybersec-agents-landing.html" class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</a>
+    <div class="navlinks">
+      <a href="work.html"><span>01</span>WORK</a>
+      <a href="services.html"><span>02</span>SERVICES</a>
+      <a href="about.html"><span>03</span>ABOUT</a>
+      <a href="dashboard.html"><span>04</span>LABS</a>
+      <a href="roadmap.html"><span>05</span>ROADMAP</a>
+      <a href="contact.html"><span>06</span>CONTACT</a>
+    </div>
+    <div class="nav-right"><span id="clock">00:00:00</span></div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="tag"><b>/01</b> WHY WE EXIST</div>
+  <h1>SECURITY TEAMS DROWN<br>IN ALERTS. WE BUILT<br>AGENTS THAT DON'T.</h1>
+  <p>SENTINEL_AGENTS started from one observation: most security alerts are noise, but you can't tell which ones until someone — or something — actually reads them.</p>
+</section>
+
+<section class="mission">
+  <div class="reveal">
+    <h2>THE PROBLEM</h2>
+    <p>A mid-size security team sees thousands of alerts a day across EDR, SIEM, email, and cloud config tools. Almost all of it is noise. The signal gets lost, analysts burn out, and the one alert that mattered slips through at 2am.</p>
+  </div>
+  <div class="reveal">
+    <h2>OUR APPROACH</h2>
+    <p>We don't ask you to trust a black box with full autonomy. Our agents classify and recommend; a human confirms every real action. The agents that run actual scans only touch assets you've explicitly verified — no surprises, no unscoped probing.</p>
+  </div>
+</section>
+
+<section class="stats-row">
+  <div class="srow-item"><div class="num countup" data-target="12">0</div><div class="lbl">AGENTS SHIPPED</div></div>
+  <div class="srow-item"><div class="num countup" data-target="93.2" data-decimals="1">0</div><div class="lbl">% NOISE REDUCED</div></div>
+  <div class="srow-item"><div class="num countup" data-target="100">0</div><div class="lbl">% HUMAN-CONFIRMED</div></div>
+  <div class="srow-item"><div class="num countup" data-target="24">0</div><div class="lbl">HR ONBOARDING TIME</div></div>
+</section>
+
+<section class="principles2">
+  <div class="sec-label"><b>/02</b> WHAT WE WON'T DO</div>
+  <div class="pgrid2">
+    <div class="pcard reveal"><div class="icon">⛔</div><h3>No silent autonomy</h3><p>No agent closes a ticket, blocks a sender, or pushes a patch without a human confirming first.</p></div>
+    <div class="pcard reveal"><div class="icon">⛔</div><h3>No unscoped scanning</h3><p>Tactical agents only touch assets you've verified ownership of — nothing outside the registry, ever.</p></div>
+    <div class="pcard reveal"><div class="icon">⛔</div><h3>No opaque scoring</h3><p>Every classification ships with a plain-English rationale, not just a number.</p></div>
+  </div>
+</section>
+
+<section class="timeline">
+  <div class="sec-label"><b>/03</b> HOW WE GOT HERE</div>
+  <div class="tl-item reveal"><div class="tly">V0</div><div class="tlc"><h4>Triage-only prototype</h4><p>Started with a single classify-only agent reading EDR and SIEM alerts for a handful of pilot teams.</p></div></div>
+  <div class="tl-item reveal"><div class="tly">V1</div><div class="tlc"><h4>Full strategic + tactical roster</h4><p>Shipped 8 strategic agents and 4 tactical scanning agents, all under the same human-confirm model.</p></div></div>
+  <div class="tl-item reveal"><div class="tly">NEXT</div><div class="tlc"><h4>Scoped autonomous actions</h4><p>Exploring narrow, reversible auto-actions (like mail quarantine) expanding case by case — never silently.</p></div></div>
+</section>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <div class="flogo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+      <p style="color:var(--gray);font-size:12px;max-width:280px;">AI agents that triage real threats, so your team stops drowning in alerts.</p>
+      <div class="map"><i style="top:30%;left:20%;"></i><i style="top:60%;left:55%;"></i><i style="top:40%;left:80%;"></i></div>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Live MVP Agents</h5>
+      <ul>
+        <li><a href="agent.html?id=triage">Triage</a></li>
+        <li><a href="agent.html?id=network-recon">Network Recon</a></li>
+        <li><a href="agent.html?id=vuln-scanner">Vuln Scanner</a></li>
+        <li><a href="agent.html?id=config-audit">Config Audit</a></li>
+        <li><a href="roadmap.html">+8 more on roadmap →</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Status</h5>
+      <ul>
+        <li><a href="dashboard.html">● All systems operational</a></li>
+        <li><a href="contact.html">support@sentinel-agents.io</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="stripe-bar"></div>
+
+<script src="shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL_AGENTS // Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .phase-row{display:grid;grid-template-columns:160px 1fr;gap:24px;padding:30px 24px;border-bottom:1px solid var(--line);}
+  .phase-row .ph-label{font-size:11px;letter-spacing:1px;color:var(--gray2);}
+  .phase-row .ph-label b{display:block;font-family:var(--display);font-size:20px;color:var(--acid);margin-top:6px;letter-spacing:0;}
+  .phase-row.now .ph-label b{color:var(--acid);}
+  .phase-row.next .ph-label b{color:var(--amber);}
+  .phase-row h3{font-size:16px;text-transform:uppercase;margin-bottom:8px;letter-spacing:.5px;}
+  .phase-row p{color:var(--gray);font-size:13px;max-width:640px;margin-bottom:16px;}
+  .phase-status{display:inline-block;font-size:9px;letter-spacing:1px;padding:4px 9px;margin-bottom:14px;}
+  .phase-status.live{border:1px solid var(--acid);color:var(--acid);}
+  .phase-status.roadmap{border:1px solid var(--amber);color:var(--amber);}
+
+  .rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:6px;}
+  @media(max-width:900px){ .rgrid{grid-template-columns:1fr;} }
+  .ritem{background:var(--bg);padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
+  .ritem h4{font-size:13px;text-transform:uppercase;margin-bottom:6px;}
+  .ritem p{color:var(--gray);font-size:11px;margin:0;}
+  .ritem a.go{font-size:10px;color:var(--amber);white-space:nowrap;}
+
+  .why{padding:50px 24px;border-top:1px solid var(--line);}
+  .why h2{font-family:var(--display);font-size:24px;text-transform:uppercase;margin-bottom:14px;letter-spacing:-.5px;}
+  .why p{color:var(--gray);font-size:13px;max-width:680px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="cybersec-agents-landing.html" class="logo"><span class="dot">▮</span> SENTINEL_AGENTS</a>
+    <div class="navlinks">
+      <a href="work.html"><span>01</span>WORK</a>
+      <a href="services.html"><span>02</span>SERVICES</a>
+      <a href="about.html"><span>03</span>ABOUT</a>
+      <a href="dashboard.html"><span>04</span>LABS</a>
+      <a href="roadmap.html"><span>05</span>ROADMAP</a>
+      <a href="contact.html"><span>06</span>CONTACT</a>
+    </div>
+    <div class="nav-right"><span id="clock">00:00:00</span></div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="tag"><b>/01</b> PRODUCT ROADMAP</div>
+  <h1>WE'RE STARTING<br>WITH 4 AGENTS<br>ON PURPOSE.</h1>
+  <p>SENTINEL_AGENTS is launching as a deliberately small MVP: four agents, fully built, with real AI backends and real-time scanning — no demo data, no smoke and mirrors. The other 8 agents in our original roster are fully designed and already have live spec pages. They ship once the MVP proves out demand.</p>
+</section>
+
+<section class="phase-row now">
+  <div class="ph-label">PHASE 0<br><b>NOW</b></div>
+  <div>
+    <span class="phase-status live">● LIVE TODAY</span>
+    <h3>MVP — 4 Core Agents</h3>
+    <p>Real OpenAI-backed classification, real socket-level scanning, real AWS config checks, a scheduler running continuous sweeps every 10 minutes, and a full audit trail of every agent run. This is the bet: if these four drive real demand, the rest gets built.</p>
+    <div class="rgrid">
+      <a class="ritem" href="agent.html?id=triage">
+        <div><h4>Triage Agent</h4><p>Classifies every alert with a rules layer + LLM reasoning pass. Human confirms every action.</p></div>
+        <span class="go">VIEW →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=network-recon">
+        <div><h4>Network Recon</h4><p>Real TCP-connect port sweeps against verified assets, diffed against a stored baseline.</p></div>
+        <span class="go">VIEW →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=vuln-scanner">
+        <div><h4>Vuln Scanner</h4><p>Real banner-grabs matched against known-CVE version ranges.</p></div>
+        <span class="go">VIEW →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=config-audit">
+        <div><h4>Config Audit</h4><p>Real AWS checks for public S3 buckets and security groups open to the internet.</p></div>
+        <span class="go">VIEW →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="phase-row next">
+  <div class="ph-label">PHASE 2<br><b>POST-MVP</b></div>
+  <div>
+    <span class="phase-status roadmap">◌ ROADMAP — NOT YET LIVE</span>
+    <h3>The Other 8 Agents</h3>
+    <p>Fully spec'd, with detail pages already live — they're just not wired to real data yet. These build out the rest of the strategic layer (decide & route) once the tactical core has proven it can drive signups and retention.</p>
+    <div class="rgrid">
+      <a class="ritem" href="agent.html?id=orchestrator">
+        <div><h4>Orchestrator</h4><p>Routes classified work to the right specialist agent, tracks SLAs.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=patch-vuln">
+        <div><h4>Patch & Vuln</h4><p>Turns Vuln Scanner findings into a ranked, risk-aware patch plan.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=endpoint-watch">
+        <div><h4>Endpoint Watch</h4><p>Behavioral baseline monitoring across endpoints.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=phishing-defense">
+        <div><h4>Phishing Defense</h4><p>Auto-quarantines suspicious mail, human confirms sender blocks.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=incident-report">
+        <div><h4>Incident Report</h4><p>Drafts the full incident timeline once something's confirmed.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=compliance-audit">
+        <div><h4>Compliance Audit</h4><p>Tracks SOC 2 / ISO 27001 control drift, built on Config Audit data.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=threat-intel">
+        <div><h4>Threat Intel</h4><p>Filters external CVE/advisory feeds for what applies to your stack.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+      <a class="ritem" href="agent.html?id=log-forensics">
+        <div><h4>Log Forensics</h4><p>Deep, on-demand log correlation for incident timelines.</p></div>
+        <span class="go">SPEC →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <h2>Why ship 4, not 12?</h2>
+  <p>Building all 12 agents before validating that anyone wants this is the easiest way to waste months on the wrong thing. Triage, Network Recon, Vuln Scanner, and Config Audit cover the most common, highest-signal entry point — alert fatigue plus exposed infrastructure — with agents that are real, auditable, and scoped to assets you've explicitly verified. If that resonates, the other 8 get built next. If it doesn't, we've learned that cheaply.</p>
+</section>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <div class="flogo"><span class="dot">▮</span> SENTINEL_AGENTS</div>
+      <p style="color:var(--gray);font-size:12px;max-width:280px;">AI agents that triage real threats, so your team stops drowning in alerts.</p>
+      <div class="map"><i style="top:30%;left:20%;"></i><i style="top:60%;left:55%;"></i><i style="top:40%;left:80%;"></i></div>
+    </div>
+    <div>
+      <h5>Navigation</h5>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Live MVP Agents</h5>
+      <ul>
+        <li><a href="agent.html?id=triage">Triage</a></li>
+        <li><a href="agent.html?id=network-recon">Network Recon</a></li>
+        <li><a href="agent.html?id=vuln-scanner">Vuln Scanner</a></li>
+        <li><a href="agent.html?id=config-audit">Config Audit</a></li>
+        <li><a href="work.html">View all →</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Status</h5>
+      <ul>
+        <li><a href="dashboard.html">● All systems operational</a></li>
+        <li><a href="contact.html">support@sentinel-agents.io</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="stripe-bar"></div>
+
+<script src="shared.js"></script>
+</body>
+</html>
