@@ -1,10 +1,5 @@
-# SENTINEL_AGENTS backend -- production image
+# LongClaw backend -- production image
 FROM python:3.11-slim
-
-# System deps for psycopg2 (Postgres) and TLS used by dnspython/boto3
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev gcc \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
