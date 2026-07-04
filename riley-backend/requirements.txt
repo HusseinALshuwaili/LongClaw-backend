@@ -2,8 +2,8 @@
 fastapi==0.109.2
 uvicorn[standard]==0.27.1
 
-# Database
-sqlalchemy[asyncio]==2.0.28
+# Database — upgraded to fix asyncpg sslmode handling
+sqlalchemy[asyncio]==2.0.40
 asyncpg==0.29.0
 alembic==1.13.1
 
@@ -17,6 +17,7 @@ python-dotenv==1.0.1
 
 # AI / LLM
 openai==1.13.3
+anthropic>=0.40.0
 httpx==0.27.0
 
 # Auth

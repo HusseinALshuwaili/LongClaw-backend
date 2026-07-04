@@ -54,7 +54,7 @@ async def _run_riley_pipeline(alert_id: int) -> None:
             )
             comments = [c for c in fb_result.scalars().all() if c]
 
-            # 4. Score
+            # 4. Score (Claude ReAct agent as Layer 3)
             scored = await score_alert(
                 alert_type=alert.alert_type,
                 severity=alert.severity,
@@ -64,11 +64,19 @@ async def _run_riley_pipeline(alert_id: int) -> None:
                 created_at=alert.created_at,
                 analyst_comments=comments,
                 db=db,
+                source_system=alert.source_system,
             )
 
             alert.fp_confidence_score = scored.fp_confidence
             alert.fp_reason = scored.reason
             alert.suggested_action = scored.suggested_action
+
+            # Store Claude's evidence chain in enrichment_data
+            if scored.evidence:
+                enrichment["claude_evidence"] = scored.evidence
+                enrichment["claude_tool_steps"] = scored.tool_steps
+                enrichment["claude_model"] = scored.model_used
+                alert.enrichment_data = enrichment
 
             # 5. Apply threshold action
             if scored.action == "AUTO_SUPPRESS":

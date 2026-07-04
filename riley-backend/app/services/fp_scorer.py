@@ -160,11 +160,17 @@ class ScoringResult:
         action: str,
         reason: str,
         suggested_action: str,
+        evidence: list[str] | None = None,
+        tool_steps: int = 0,
+        model_used: str = "unknown",
     ) -> None:
         self.fp_confidence = fp_confidence
         self.action = action            # AUTO_SUPPRESS | LOW_PRIORITY_REVIEW | ESCALATE
         self.reason = reason
         self.suggested_action = suggested_action
+        self.evidence = evidence or []
+        self.tool_steps = tool_steps
+        self.model_used = model_used
 
 
 async def score_alert(
@@ -176,6 +182,7 @@ async def score_alert(
     created_at: datetime | None,
     analyst_comments: list[str] | None,
     db: AsyncSession,
+    source_system: str = "unknown",
 ) -> ScoringResult:
     """
     Main entry point. Runs all three scoring layers and returns a ScoringResult.
@@ -200,13 +207,14 @@ async def score_alert(
         pre_llm=pre_llm_score,
     )
 
-    # ── Layer 3: LLM (only when ambiguous — saves tokens) ────
+    # ── Layer 3: Claude ReAct agent ──────────────────────────
     llm_result = await llm_service.score_with_llm(
         alert_type=alert_type,
         severity=severity,
         raw_data=raw_data,
         enrichment=enrichment,
         analyst_comments=analyst_comments,
+        source_system=source_system,
     )
 
     # Blend: 60% rule+pattern, 40% LLM
@@ -246,4 +254,7 @@ async def score_alert(
         action=action,
         reason=reason_str,
         suggested_action=suggested,
+        evidence=llm_result.evidence,
+        tool_steps=llm_result.tool_steps,
+        model_used=llm_result.model_used,
     )

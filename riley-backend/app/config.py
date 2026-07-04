@@ -40,6 +40,9 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: str = "gpt-4o-mini"
 
+    ANTHROPIC_API_KEY: Optional[str] = None
+    ANTHROPIC_MODEL: str = "claude-sonnet-4-6"
+
     GROQ_API_KEY: Optional[str] = None
 
     SLACK_WEBHOOK_URL: Optional[str] = None
