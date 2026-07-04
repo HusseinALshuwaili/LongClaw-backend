@@ -79,6 +79,13 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 
 async def create_all_tables() -> None:
-    async with engine.begin() as conn:
-        from app.models import alert, feedback, pattern, user  # noqa: F401
-        await conn.run_sync(Base.metadata.create_all)
+    from app.models import alert, feedback, pattern, user  # noqa: F401
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        # Tables may already exist (e.g. on restart) — that's fine
+        if 'already exists' in str(e).lower() or 'duplicate' in str(e).lower():
+            pass
+        else:
+            raise
