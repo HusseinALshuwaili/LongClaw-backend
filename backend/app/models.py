@@ -29,6 +29,11 @@ class Alert(Base):
     rationale = Column(Text, nullable=True)
     suggested_action = Column(String, nullable=True)     # escalate | dismiss
 
+    # MITRE ATT&CK mapping (set by Triage agent)
+    mitre_technique_id = Column(String, nullable=True)   # e.g. T1110
+    mitre_technique_name = Column(String, nullable=True) # e.g. Brute Force
+    mitre_tactic = Column(String, nullable=True)         # e.g. Credential Access
+
     # human decision
     resolution = Column(String, nullable=True)           # escalated | dismissed
     resolved_by = Column(String, nullable=True)

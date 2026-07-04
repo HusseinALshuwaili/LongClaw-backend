@@ -21,6 +21,9 @@ class AlertOut(BaseModel):
     confidence: Optional[float] = None
     rationale: Optional[str] = None
     suggested_action: Optional[str] = None
+    mitre_technique_id: Optional[str] = None
+    mitre_technique_name: Optional[str] = None
+    mitre_tactic: Optional[str] = None
     resolution: Optional[str] = None
     created_at: datetime
     classified_at: Optional[datetime] = None
@@ -47,6 +50,18 @@ class TriageClassification(BaseModel):
     confidence: float = Field(ge=0, le=1)
     rationale: str
     suggested_action: Literal["escalate", "dismiss"]
+    mitre_technique_id: Optional[str] = Field(
+        default=None,
+        description="MITRE ATT&CK technique ID (e.g. T1110). Null if no technique applies.",
+    )
+    mitre_technique_name: Optional[str] = Field(
+        default=None,
+        description="Human-readable technique name (e.g. 'Brute Force'). Null if no technique applies.",
+    )
+    mitre_tactic: Optional[str] = Field(
+        default=None,
+        description="ATT&CK tactic this technique belongs to (e.g. 'Credential Access'). Null if no technique applies.",
+    )
 
 
 # ---------- Assets ----------

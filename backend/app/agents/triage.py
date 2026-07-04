@@ -40,10 +40,11 @@ BENIGN_PATTERNS = [
     re.compile(r"successful login.*known device", re.I),
 ]
 
+# (pattern, ATT&CK technique_id, technique_name, tactic)
 CRITICAL_PATTERNS = [
-    re.compile(r"ransomware", re.I),
-    re.compile(r"critical cve", re.I),
-    re.compile(r"public poc", re.I),
+    (re.compile(r"ransomware", re.I),   "T1486", "Data Encrypted for Impact", "Impact"),
+    (re.compile(r"critical cve", re.I), "T1190", "Exploit Public-Facing Application", "Initial Access"),
+    (re.compile(r"public poc", re.I),   "T1190", "Exploit Public-Facing Application", "Initial Access"),
 ]
 
 
@@ -56,13 +57,16 @@ def run_rules(description: str) -> TriageClassification | None:
                 rationale=f"Matched known-benign rule pattern: '{pat.pattern}'.",
                 suggested_action="dismiss",
             )
-    for pat in CRITICAL_PATTERNS:
+    for pat, tid, tname, tactic in CRITICAL_PATTERNS:
         if pat.search(description):
             return TriageClassification(
                 severity="high",
                 confidence=0.9,
                 rationale=f"Matched critical-pattern rule: '{pat.pattern}'.",
                 suggested_action="escalate",
+                mitre_technique_id=tid,
+                mitre_technique_name=tname,
+                mitre_tactic=tactic,
             )
     return None
 
@@ -72,12 +76,36 @@ def run_rules(description: str) -> TriageClassification | None:
 # ---------------------------------------------------------------------------
 SYSTEM_PROMPT = (
     "You are the Triage Agent inside a security operations platform. "
-    "You read a single security alert and classify it. You NEVER take action "
-    "yourself -- you only recommend. Be conservative: when genuinely unsure, "
-    "prefer 'escalate' with a lower confidence score over silently dismissing "
-    "something that could be real. Keep the rationale to 1-2 plain-English "
-    "sentences a non-expert could understand."
+    "You read a single security alert, classify it, and map it to the "
+    "most relevant MITRE ATT&CK technique where applicable. "
+    "You NEVER take action yourself -- you only recommend. "
+    "Be conservative: when genuinely unsure, prefer 'escalate' with a lower "
+    "confidence score over silently dismissing something that could be real. "
+    "Keep the rationale to 1-2 plain-English sentences a non-expert could understand. "
+    "For MITRE mapping: set mitre_technique_id to the technique ID (e.g. T1110), "
+    "mitre_technique_name to the technique name (e.g. Brute Force), and "
+    "mitre_tactic to the parent tactic (e.g. Credential Access). "
+    "Set all three to null if the alert does not map to a known ATT&CK technique."
 )
+
+# ---------------------------------------------------------------------------
+# Mock ATT&CK keyword map (used when no LLM key is configured)
+# ---------------------------------------------------------------------------
+_MOCK_MITRE: list[tuple[list[str], str, str, str]] = [
+    (["ssh", "brute", "fail", "repeated login"],      "T1110", "Brute Force",                          "Credential Access"),
+    (["phish", "spear", "email link", "malicious url"],"T1566", "Phishing",                            "Initial Access"),
+    (["ransomware", "encrypted", "ransom"],            "T1486", "Data Encrypted for Impact",            "Impact"),
+    (["s3", "bucket", "public acl", "public read"],   "T1530", "Data from Cloud Storage",              "Collection"),
+    (["exfil", "data transfer", "dns tunnel"],         "T1041", "Exfiltration Over C2 Channel",         "Exfiltration"),
+    (["rdp", "remote desktop"],                        "T1021.001", "Remote Desktop Protocol",          "Lateral Movement"),
+    (["privilege", "escalat", "sudo", "root"],         "T1068", "Exploitation for Privilege Escalation","Privilege Escalation"),
+    (["scan", "port sweep", "nmap", "discovery"],      "T1046", "Network Service Discovery",            "Discovery"),
+    (["inject", "log4", "jndi", "rce", "sqli"],        "T1190", "Exploit Public-Facing Application",   "Initial Access"),
+    (["credential", "mimikatz", "lsass", "hash dump"], "T1003", "OS Credential Dumping",               "Credential Access"),
+    (["dos", "ddos", "flood", "amplification"],        "T1498", "Network Denial of Service",            "Impact"),
+    (["lateral", "smb", "pass the hash", "wmi"],       "T1021", "Remote Services",                     "Lateral Movement"),
+    (["security group", "firewall", "open port 22", "open port 3389"], "T1562.007", "Disable or Modify Cloud Firewall", "Defense Evasion"),
+]
 
 _parser = PydanticOutputParser(pydantic_object=TriageClassification)
 
@@ -172,6 +200,15 @@ def run_llm(description: str, source: str, provider: str) -> TriageClassificatio
     return TriageClassification(**result) if isinstance(result, dict) else run_mock_llm(description, source)
 
 
+def _mock_mitre_lookup(description: str):
+    """Keyword-based ATT&CK technique lookup for mock mode."""
+    lower = description.lower()
+    for keywords, tid, tname, tactic in _MOCK_MITRE:
+        if any(kw in lower for kw in keywords):
+            return tid, tname, tactic
+    return None, None, None
+
+
 def run_mock_llm(description: str, source: str) -> TriageClassification:
     """Deterministic stand-in used when no LLM key is configured. Mirrors
     the LLM output shape exactly so the pipeline is fully runnable in
@@ -186,6 +223,7 @@ def run_mock_llm(description: str, source: str) -> TriageClassification:
         severity, confidence = "high", 0.8
     if any(w in lower for w in ["info", "drift", "minor", "open port"]):
         severity, confidence, action = "low", 0.55, "escalate"
+    tid, tname, tactic = _mock_mitre_lookup(description)
     return TriageClassification(
         severity=severity,
         confidence=confidence,
@@ -195,6 +233,9 @@ def run_mock_llm(description: str, source: str) -> TriageClassification:
             f"Set GROQ_API_KEY (free at console.groq.com) to enable real LLM classification."
         ),
         suggested_action=action,
+        mitre_technique_id=tid,
+        mitre_technique_name=tname,
+        mitre_tactic=tactic,
     )
 
 
@@ -232,5 +273,8 @@ def apply_classification(alert, result: TriageClassification) -> None:
     alert.confidence = result.confidence
     alert.rationale = result.rationale
     alert.suggested_action = result.suggested_action
+    alert.mitre_technique_id = result.mitre_technique_id
+    alert.mitre_technique_name = result.mitre_technique_name
+    alert.mitre_tactic = result.mitre_tactic
     alert.status = "classified"
     alert.classified_at = datetime.utcnow()
