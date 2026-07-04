@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+import re
 import ssl
 from collections.abc import AsyncGenerator
 
@@ -10,31 +12,47 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-from app.config import settings
 
+def _prepare_db_url(url: str):
+    """Strip asyncpg-incompatible params and return (clean_url, connect_args)."""
+    # Fix driver prefix
+    url = re.sub(r'^postgres(ql)?://', 'postgresql+asyncpg://', url)
 
-def _make_engine():
-    url = settings.DATABASE_URL
-    # For Neon / remote Postgres, enable SSL via connect_args
-    # and strip sslmode from URL (asyncpg handles SSL separately)
-    connect_args = {}
-    if "neon.tech" in url or ("localhost" not in url and "127.0.0.1" not in url):
+    # Remove params asyncpg rejects
+    for param in ('sslmode', 'channel_binding', 'options'):
+        url = re.sub(rf'[?&]{param}=[^&]*', '', url)
+
+    # Clean up dangling punctuation
+    url = re.sub(r'\?&+', '?', url)
+    url = re.sub(r'[?&]+$', '', url)
+
+    # Enable SSL for any remote host (Neon requires it)
+    connect_args: dict = {}
+    is_remote = 'localhost' not in url and '127.0.0.1' not in url
+    if is_remote:
         ctx = ssl.create_default_context()
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
-        connect_args = {"ssl": ctx}
+        connect_args['ssl'] = ctx
 
-    return create_async_engine(
-        url,
-        echo=settings.APP_ENV == "development",
-        pool_size=5,
-        max_overflow=10,
-        pool_pre_ping=True,
-        connect_args=connect_args,
-    )
+    return url, connect_args
 
 
-engine = _make_engine()
+# Read directly from env so this works regardless of config.py validator state
+_raw_url = os.environ.get(
+    'DATABASE_URL',
+    'postgresql+asyncpg://riley:riley_secret@localhost:5432/riley_db'
+)
+_db_url, _connect_args = _prepare_db_url(_raw_url)
+
+engine = create_async_engine(
+    _db_url,
+    echo=os.environ.get('APP_ENV', 'development') == 'development',
+    pool_size=5,
+    max_overflow=10,
+    pool_pre_ping=True,
+    connect_args=_connect_args,
+)
 
 AsyncSessionLocal = async_sessionmaker(
     engine,
